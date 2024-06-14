@@ -31,8 +31,8 @@
 #include "audio_stream_import_settings.h"
 #include "editor/audio_stream_preview.h"
 #include "editor/editor_file_system.h"
-#include "editor/editor_scale.h"
 #include "editor/editor_string_names.h"
+#include "editor/themes/editor_scale.h"
 #include "scene/gui/check_box.h"
 
 AudioStreamImportSettingsDialog *AudioStreamImportSettingsDialog::singleton = nullptr;
@@ -277,6 +277,8 @@ void AudioStreamImportSettingsDialog::_draw_indicator() {
 		rect.size.height -= y_ofs;
 	}
 
+	_current_label->set_text(String::num(_current, 2).pad_decimals(2) + " /");
+
 	float ofs_x = (_current - zoom_bar->get_value()) * rect.size.width / zoom_bar->get_page();
 	if (ofs_x < 0 || ofs_x >= rect.size.width) {
 		return;
@@ -310,8 +312,6 @@ void AudioStreamImportSettingsDialog::_draw_indicator() {
 			}
 		}
 	}
-
-	_current_label->set_text(String::num(_current, 2).pad_decimals(2) + " /");
 }
 
 void AudioStreamImportSettingsDialog::_on_indicator_mouse_exited() {
@@ -590,7 +590,7 @@ AudioStreamImportSettingsDialog::AudioStreamImportSettingsDialog() {
 	color_rect->set_v_size_flags(Control::SIZE_EXPAND_FILL);
 
 	_player = memnew(AudioStreamPlayer);
-	_player->connect("finished", callable_mp(this, &AudioStreamImportSettingsDialog::_on_finished));
+	_player->connect(SceneStringName(finished), callable_mp(this, &AudioStreamImportSettingsDialog::_on_finished));
 	color_rect->add_child(_player);
 
 	VBoxContainer *vbox = memnew(VBoxContainer);
@@ -600,7 +600,7 @@ AudioStreamImportSettingsDialog::AudioStreamImportSettingsDialog() {
 
 	_preview = memnew(ColorRect);
 	_preview->set_v_size_flags(Control::SIZE_EXPAND_FILL);
-	_preview->connect("draw", callable_mp(this, &AudioStreamImportSettingsDialog::_draw_preview));
+	_preview->connect(SceneStringName(draw), callable_mp(this, &AudioStreamImportSettingsDialog::_draw_preview));
 	_preview->set_v_size_flags(Control::SIZE_EXPAND_FILL);
 	vbox->add_child(_preview);
 
@@ -618,17 +618,17 @@ AudioStreamImportSettingsDialog::AudioStreamImportSettingsDialog() {
 	zoom_hbox->add_child(zoom_out);
 	zoom_hbox->add_child(zoom_reset);
 	zoom_hbox->add_child(zoom_in);
-	zoom_in->connect("pressed", callable_mp(this, &AudioStreamImportSettingsDialog::_preview_zoom_in));
-	zoom_reset->connect("pressed", callable_mp(this, &AudioStreamImportSettingsDialog::_preview_zoom_reset));
-	zoom_out->connect("pressed", callable_mp(this, &AudioStreamImportSettingsDialog::_preview_zoom_out));
+	zoom_in->connect(SceneStringName(pressed), callable_mp(this, &AudioStreamImportSettingsDialog::_preview_zoom_in));
+	zoom_reset->connect(SceneStringName(pressed), callable_mp(this, &AudioStreamImportSettingsDialog::_preview_zoom_reset));
+	zoom_out->connect(SceneStringName(pressed), callable_mp(this, &AudioStreamImportSettingsDialog::_preview_zoom_out));
 	zoom_bar->connect("value_changed", callable_mp(this, &AudioStreamImportSettingsDialog::_preview_zoom_offset_changed));
 	vbox->add_child(zoom_hbox);
 
 	_indicator = memnew(Control);
 	_indicator->set_anchors_and_offsets_preset(Control::PRESET_FULL_RECT);
-	_indicator->connect("draw", callable_mp(this, &AudioStreamImportSettingsDialog::_draw_indicator));
-	_indicator->connect("gui_input", callable_mp(this, &AudioStreamImportSettingsDialog::_on_input_indicator));
-	_indicator->connect("mouse_exited", callable_mp(this, &AudioStreamImportSettingsDialog::_on_indicator_mouse_exited));
+	_indicator->connect(SceneStringName(draw), callable_mp(this, &AudioStreamImportSettingsDialog::_draw_indicator));
+	_indicator->connect(SceneStringName(gui_input), callable_mp(this, &AudioStreamImportSettingsDialog::_on_input_indicator));
+	_indicator->connect(SceneStringName(mouse_exited), callable_mp(this, &AudioStreamImportSettingsDialog::_on_indicator_mouse_exited));
 	_preview->add_child(_indicator);
 
 	HBoxContainer *hbox = memnew(HBoxContainer);
@@ -639,13 +639,13 @@ AudioStreamImportSettingsDialog::AudioStreamImportSettingsDialog() {
 	_play_button->set_flat(true);
 	hbox->add_child(_play_button);
 	_play_button->set_focus_mode(Control::FOCUS_NONE);
-	_play_button->connect("pressed", callable_mp(this, &AudioStreamImportSettingsDialog::_play));
+	_play_button->connect(SceneStringName(pressed), callable_mp(this, &AudioStreamImportSettingsDialog::_play));
 
 	_stop_button = memnew(Button);
 	_stop_button->set_flat(true);
 	hbox->add_child(_stop_button);
 	_stop_button->set_focus_mode(Control::FOCUS_NONE);
-	_stop_button->connect("pressed", callable_mp(this, &AudioStreamImportSettingsDialog::_stop));
+	_stop_button->connect(SceneStringName(pressed), callable_mp(this, &AudioStreamImportSettingsDialog::_stop));
 
 	_current_label = memnew(Label);
 	_current_label->set_horizontal_alignment(HORIZONTAL_ALIGNMENT_RIGHT);
