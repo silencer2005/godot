@@ -24,6 +24,9 @@
 
 /custom.py
 misc/hooks/pre-commit-custom-*
+misc/angle
+misc/nir
+thirdparty/swappy-frame-pacing
 
 #############################
 ### Godot generated files ###
