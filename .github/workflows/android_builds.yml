@@ -9,7 +9,6 @@ env:
     module_text_server_fb_enabled=yes
     tests=no
     swappy=yes
-    generate_apk
 
 jobs:
   build-android:
