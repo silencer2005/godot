@@ -9,6 +9,7 @@ env:
     module_text_server_fb_enabled=yes
     tests=no
     swappy=yes
+    generate_apk
 
 jobs:
   build-android:
@@ -39,7 +40,7 @@ jobs:
           - name: Debug Template arm64 (target=template_debug, arch=arm64)
             cache-name: android-template-debug-arm64
             target: template_debug
-            scons-flags: arch=arm64 debug_symbols=yes
+            scons-flags: arch=arm64 debug_symbols=yes generate_android_binaries=yes
 
     steps:
       - name: Checkout
