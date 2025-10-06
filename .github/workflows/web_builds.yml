@@ -7,7 +7,6 @@ env:
   SCONS_FLAGS: >-
     dev_mode=yes
     tests=no
-    debug_symbols=no
     use_closure_compiler=yes
   EM_VERSION: 4.0.11
 
@@ -23,13 +22,25 @@ jobs:
           - name: Template w/ threads (target=template_release, threads=yes)
             cache-name: web-template
             target: template_release
-            scons-flags: threads=yes
+            scons-flags: threads=yes debug_symbols=no
             artifact: true
 
           - name: Template w/o threads (target=template_release, threads=no)
             cache-name: web-nothreads-template
             target: template_release
-            scons-flags: threads=no
+            scons-flags: threads=no debug_symbols=no
+            artifact: true
+            
+          - name: Debug Template w/ threads (target=template_debug, threads=yes)
+            cache-name: web-template-debug
+            target: template_debug
+            scons-flags: threads=yes debug_symbols=yes
+            artifact: true
+
+          - name: Debug Template w/o threads (target=template_release, threads=no)
+            cache-name: web-nothreads-template-debug
+            target: template_debug
+            scons-flags: threads=no debug_symbols=yes
             artifact: true
 
     steps:
