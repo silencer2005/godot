@@ -1,5 +1,25 @@
 name: 🔗 GHA
-on: [push, pull_request, merge_group]
+on: #[push, pull_request, merge_group]
+  workflow_dispatch:
+    inputs:
+      build_android:
+        type: boolean
+        default: false
+      build_ios:
+        type: boolean
+        default: false
+      build_linux:
+        type: boolean
+        default: false
+      build_macos:
+        type: boolean
+        default: false
+      build_windows:
+        type: boolean
+        default: false
+      build_web:
+        type: boolean
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}|${{ github.ref_name }}
@@ -16,31 +36,37 @@ jobs:
   # Second stage: Run all the builds and some of the tests.
 
   android-build:
+    if: ${{  github.event.inputs.build_android == 'true' }}
     name: 🤖 Android
     needs: static-checks
     uses: ./.github/workflows/android_builds.yml
 
   ios-build:
+    if: ${{  github.event.inputs.build_android == 'true' }}
     name: 🍏 iOS
     needs: static-checks
     uses: ./.github/workflows/ios_builds.yml
 
   linux-build:
+    if: ${{  github.event.inputs.build_android == 'true' }}
     name: 🐧 Linux
     needs: static-checks
     uses: ./.github/workflows/linux_builds.yml
 
   macos-build:
+    if: ${{  github.event.inputs.build_android == 'true' }}
     name: 🍎 macOS
     needs: static-checks
     uses: ./.github/workflows/macos_builds.yml
 
   windows-build:
+    if: ${{  github.event.inputs.build_android == 'true' }}
     name: 🏁 Windows
     needs: static-checks
     uses: ./.github/workflows/windows_builds.yml
 
   web-build:
+    if: ${{  github.event.inputs.build_android == 'true' }}
     name: 🌐 Web
     needs: static-checks
     uses: ./.github/workflows/web_builds.yml
