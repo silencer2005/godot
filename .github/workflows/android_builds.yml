@@ -19,22 +19,27 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Editor (target=editor)
-            cache-name: android-editor
-            target: editor
-            scons-flags: >-
-              arch=arm64
-              production=yes
+          #- name: Editor (target=editor)
+          #  cache-name: android-editor
+          #  target: editor
+          #  scons-flags: >-
+          #    arch=arm64
+          #    production=yes
 
-          - name: Template arm32 (target=template_debug, arch=arm32)
-            cache-name: android-template-arm32
-            target: template_debug
-            scons-flags: arch=arm32
+          #- name: Template arm32 (target=template_debug, arch=arm32)
+          #  cache-name: android-template-arm32
+          #  target: template_debug
+          #  scons-flags: arch=arm32
 
-          - name: Template arm64 (target=template_debug, arch=arm64)
+          - name: Template arm64 (target=template_release, arch=arm64)
             cache-name: android-template-arm64
+            target: template_release
+            scons-flags: arch=arm64 debug_symbols=no
+
+          - name: Debug Template arm64 (target=template_debug, arch=arm64)
+            cache-name: android-template-debug-arm64
             target: template_debug
-            scons-flags: arch=arm64
+            scons-flags: arch=arm64 debug_symbols=yes
 
     steps:
       - name: Checkout

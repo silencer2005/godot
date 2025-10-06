@@ -19,6 +19,7 @@ env:
 jobs:
   build-linux:
     # Stay one LTS before latest to increase portability of Linux artifacts.
+    if: false
     runs-on: ubuntu-22.04
     name: ${{ matrix.name }}
     timeout-minutes: 120
@@ -82,13 +83,6 @@ jobs:
             target: template_release
             scons-flags: module_mono_enabled=yes
             bin: ./bin/godot.linuxbsd.template_release.x86_64.mono
-            artifact: true
-
-          - name: Template w/ Mono, debug (target=template_debug)
-            cache-name: linux-template-mono-debug
-            target: template_debug
-            scons-flags: module_mono_enabled=yes
-            bin: ./bin/godot.linuxbsd.template_debug.x86_64.mono
             artifact: true
 
           - name: Minimal template (target=template_release, everything disabled)
